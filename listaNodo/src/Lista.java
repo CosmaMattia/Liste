@@ -1,6 +1,10 @@
 public class Lista {
     // Riferimento al primo nodo della lista
     Nodo root;
+    // Costruttore add
+    public void add (String s) {
+        root = null;
+    }
     // Costruttore
     public void addHead(Nodo n) {
         // Aggiunge un nodo in testa alla lista
@@ -31,6 +35,13 @@ public class Lista {
             // Ora current è l'ultimo nodo della lista
             current.setNext(n);
         }
+    }
+    // Parte remove
+    public void remove (String s) {
+        
+    }
+    public boolean exists (String s) {
+        return true;
     }
     // Metodo per rappresentare la lista come stringa
     public String toString() {
