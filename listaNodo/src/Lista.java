@@ -1,61 +1,102 @@
+// Classe Lista bidirezionale
+// Gestisce una lista di nodi dove ogni nodo ha riferimento a next e prev
 public class Lista {
+
     // Riferimento al primo nodo della lista
-    Nodo root;
-    // Costruttore add
-    public void add (String s) {
-        root = null;
+    private Nodo root;
+    
+    // Riferimento all'ultimo nodo della lista (utile per stampa indietro)
+    private Nodo tail;
+
+    // Costruttore della lista (inizialmente vuota)
+    public Lista() {
+        this.root = null;
+        this.tail = null;
     }
-    // Costruttore
+
+    // AGGIUNTA IN TESTA
     public void addHead(Nodo n) {
-        // Aggiunge un nodo in testa alla lista
         if (this.root == null) {
-            // La lista è vuota
-            this.root = n;
+            // Lista vuota: root e tail puntano allo stesso nodo
+            this.root = this.tail = n;
         } else {
-            // La lista non è vuota
-            n.setNext(this.root);
-            this.root = n;
+            n.setNext(this.root);  // nodo successivo = vecchio root
+            this.root.setPrev(n);  // vecchio root prev = nuovo nodo
+            this.root = n;         // aggiorno root
         }
     }
-    // Costruttore
+
+    // AGGIUNTA IN CODA
     public void addTail(Nodo n) {
-        // Aggiunge un nodo in coda alla lista
-        if (this.root == null) {
-            // La lista è vuota
-            this.root = n;
-        // La lista non è vuota
+        if (this.tail == null) {
+            // Lista vuota: root e tail puntano allo stesso nodo
+            this.root = this.tail = n;
         } else {
-            // Scorro la lista fino alla fine
-            Nodo current = this.root;
-            // Finché il nodo successivo non è null
-            while (current.getNext() != null) {
-                // Passo al nodo successivo
-                current = current.getNext();
-            }
-            // Ora current è l'ultimo nodo della lista
-            current.setNext(n);
+            this.tail.setNext(n);  // vecchio tail next = nuovo nodo
+            n.setPrev(this.tail);  // nuovo nodo prev = vecchio tail
+            this.tail = n;         // aggiorno tail
         }
     }
-    // Parte remove
-    public void remove (String s) {
-        
-    }
-    public boolean exists (String s) {
-        return true;
-    }
-    // Metodo per rappresentare la lista come stringa
-    public String toString() {
-        // Scorro la lista e costruisco la stringa
-        String s = "La lista contiene:\n";
-        Nodo current = this.root;
-        // Finché current non è null
+
+    // RIMOZIONE DI UN NODO PER VALORE
+    public void remove(String valore) {
+        Nodo current = root;
+
         while (current != null) {
-            // Aggiungo il valore del nodo corrente alla stringa
-            s += current.getValore() + "\n";
-            // Passo al nodo successivo
+            if (current.getValore().equals(valore)) {
+
+                if (current == root) {
+                    root = current.getNext();
+                    if (root != null) root.setPrev(null);
+                    else tail = null; // lista diventata vuota
+                } else if (current == tail) {
+                    tail = current.getPrev();
+                    tail.setNext(null);
+                } else {
+                    current.getPrev().setNext(current.getNext());
+                    current.getNext().setPrev(current.getPrev());
+                }
+
+                System.out.println("Elemento '" + valore + "' rimosso.");
+                return;
+            }
             current = current.getNext();
+        }
+
+        System.out.println("Elemento '" + valore + "' non trovato.");
     }
-    // Aggiungo la fine della lista
-        return s + "Fine della lista.";
+
+    // RICERCA DI UN VALORE
+    public boolean exists(String valore) {
+        Nodo current = root;
+        while (current != null) {
+            if (current.getValore().equals(valore)) return true;
+            current = current.getNext();
+        }
+        return false;
+    }
+
+    // STAMPA LA LISTA IN AVANTI
+    public String printForward() {
+        String s = "Lista avanti:\n";
+        Nodo current = root;
+        while (current != null) {
+            s += current.getValore() + "\n";
+            current = current.getNext();
+        }
+        s += "Fine lista.\n";
+        return s;
+    }
+
+    // STAMPA LA LISTA ALL’INDIETRO
+    public String printBackward() {
+        String s = "Lista indietro:\n";
+        Nodo current = tail;
+        while (current != null) {
+            s += current.getValore() + "\n";
+            current = current.getPrev();
+        }
+        s += "Fine lista.\n";
+        return s;
     }
 }
